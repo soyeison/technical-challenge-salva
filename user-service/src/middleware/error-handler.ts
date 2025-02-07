@@ -1,0 +1,25 @@
+import { Request, Response, NextFunction } from "express";
+import { ErrorWithStatus } from "../error/error-status";
+
+export class GlobalErrorHanlder {
+  static async handleError(
+    err: unknown,
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    if (err instanceof ErrorWithStatus) {
+      res.status(err.status ?? 500).json({
+        errors: {
+          message: err.message,
+        },
+      });
+    } else {
+      res.status(500).json({
+        errors: {
+          message: "An unknown error occurred",
+        },
+      });
+    }
+  }
+}
