@@ -1,0 +1,18 @@
+services:
+  # user-service:
+  #   image: user-service
+  #   ports:
+  #     - "3002:3002"
+  #   depends_on:
+  #     - user-serbice-db
+
+  user-serbice-db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=supersecret
+    volumes:
+      - C:/ProgramData/PostgreSQL/microservices/user-service:/var/lib/postgresql/data
+    ports:
+      - "5550:5432"

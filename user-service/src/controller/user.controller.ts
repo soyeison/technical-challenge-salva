@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { UserService } from "../service/user.service";
-import { ErrorWithStatus } from "../error/error-status";
 
 export class UserController {
   private userService: UserService;
