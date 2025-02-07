@@ -1,18 +1,13 @@
-export class UserRepository {
-  async getAll(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      resolve([
-        {
-          id: 1,
-          firstName: "Jhon",
-          lastName: "Doe",
-        },
-        {
-          id: 2,
-          firstName: "Yeison",
-          lastName: "Villegas",
-        },
-      ]);
-    });
+import { Repository } from "typeorm";
+import { User } from "../entity/user.entity";
+
+export class UserRepository extends Repository<User> {
+  constructor(repository: Repository<User>) {
+    super(repository.target, repository.manager, repository.queryRunner);
+  }
+  async getByEmail(email: string): Promise<User | null> {
+    const user = await this.findOneBy({ email });
+
+    return user;
   }
 }

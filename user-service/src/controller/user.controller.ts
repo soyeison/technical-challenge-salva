@@ -19,4 +19,14 @@ export class UserController {
       return next(error);
     }
   }
+
+  async create(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const resp = await this.userService.create(req.body);
+      res.status(201).json({ data: resp, message: "Usuario creado con exito" });
+    } catch (error) {
+      console.log("Error obteniendo todos los usuarios");
+      return next(error);
+    }
+  }
 }
