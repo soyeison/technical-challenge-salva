@@ -1,7 +1,4 @@
-export class CreateUserDto {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  lastLogin: Date;
-}
+import { z } from "zod";
+import { createUserSchema } from "../schemas/create-user.schema";
+
+export type CreateUserDto = z.infer<typeof createUserSchema>;

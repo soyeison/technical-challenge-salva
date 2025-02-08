@@ -14,8 +14,12 @@ export class UserController {
     res: Response,
     next: NextFunction
   ): Promise<void> => {
+    const { limit, page } = req.query;
     try {
-      const resp = await this.userService.getAll();
+      const resp = await this.userService.getAll(
+        limit ? Number(limit) : undefined,
+        page ? Number(page) : undefined
+      );
       res
         .status(200)
         .json({ data: resp, message: "Usuarios obtenidos con exito" });

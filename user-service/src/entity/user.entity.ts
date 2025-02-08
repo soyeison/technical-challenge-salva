@@ -23,9 +23,6 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
-  lastLogin: Date;
-
   @CreateDateColumn({
     type: "timestamp",
     default: () => "CURRENT_TIMESTAMP(6)",
