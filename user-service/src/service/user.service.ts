@@ -1,5 +1,7 @@
+import { AppDataSource } from "../data-source";
 import { CreateUserDto } from "../dto/create-user.dto";
 import { User } from "../entity/user.entity";
+import { AppError } from "../error/error-status";
 import { UserRepository } from "../repository/user.repository";
 
 export class UserService {
@@ -10,32 +12,60 @@ export class UserService {
   }
 
   async getAll() {
-    try {
-      const users = await this.userRepository.find();
-      if (!users) {
-        return [];
-      }
-
-      return users;
-    } catch (error) {
-      throw new Error("No se pudieron obtener los usuarios");
+    const users = await this.userRepository.find();
+    console.log(users);
+    if (!users || !users.length) {
+      return [];
     }
+
+    return users;
   }
 
   async create(payload: CreateUserDto): Promise<User> {
-    try {
-      const userToCreate = new User();
-      userToCreate.firstName = payload.firstName;
-      userToCreate.lastName = payload.lastName;
-      userToCreate.email = payload.email;
-      userToCreate.password = payload.password;
-      userToCreate.lastLogin = payload.lastLogin;
+    const userToCreate = new User();
+    userToCreate.firstName = payload.firstName;
+    userToCreate.lastName = payload.lastName;
+    userToCreate.email = payload.email;
+    userToCreate.password = payload.password;
+    userToCreate.lastLogin = payload.lastLogin;
 
-      const userCreated = await this.userRepository.save(userToCreate);
-      return userCreated;
-    } catch (error) {
-      console.log("Error creando usuario");
-      throw new Error("No se pudo crear el usuario");
+    const userCreated = await this.userRepository.save(userToCreate);
+    return userCreated;
+  }
+
+  async getByEmail(email: string): Promise<User | null> {
+    const user = await this.userRepository.findOneBy({ email });
+
+    if (!user) {
+      throw new AppError(`El usuario con email ${email} no existe`, 404);
     }
+    return user;
+  }
+
+  async update(id: number, payload: any) {
+    const user = await this.userRepository.findOneBy({ id });
+
+    if (!user) {
+      throw new AppError(`El usuario con id ${id} no existe`, 404);
+    }
+
+    return await this.userRepository.save({
+      ...user,
+      ...payload,
+    });
+  }
+
+  async delete(id: number) {
+    const user = await this.userRepository.findOneBy({ id });
+
+    if (!user) {
+      throw new AppError(`El usuario con id ${id} no existe`, 404);
+    }
+
+    await AppDataSource.createQueryBuilder()
+      .delete()
+      .from(User)
+      .where("id = :id", { id })
+      .execute();
   }
 }

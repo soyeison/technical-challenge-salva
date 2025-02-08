@@ -12,12 +12,10 @@ const userRepository = new UserRepository(AppDataSource.getRepository(User));
 const userService = new UserService(userRepository);
 const userController = new UserController(userService);
 
-// El .bind es para que se pueda mantener la referencia de this correctamente
-router.get("/", userController.getAll.bind(userController));
-router.post("/", userController.create.bind(userController));
-router.get("/:id", (req: Request, res: Response) => {
-  const { id } = req.params;
-  res.send(`Obtener usuario ${id}`);
-});
+router.get("/", userController.getAll);
+router.post("/", userController.create);
+router.get("/search", userController.getByEmail);
+router.put("/:id", userController.update);
+router.delete("/:id", userController.delete);
 
 export { router as userRouter };

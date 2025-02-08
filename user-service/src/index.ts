@@ -14,7 +14,7 @@ app.get("/healthcheck", (req: Request, res: Response) => {
 app.use(express.json());
 
 // Principal route
-app.use("/user", userRouter);
+app.use("/users", userRouter);
 
 // Error handler
 app.use(GlobalErrorHanlder.handleError);

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ErrorWithStatus } from "../error/error-status";
+import { AppError } from "../error/error-status";
 
 export class GlobalErrorHanlder {
   static async handleError(
@@ -8,8 +8,8 @@ export class GlobalErrorHanlder {
     res: Response,
     next: NextFunction
   ) {
-    if (err instanceof ErrorWithStatus) {
-      res.status(err.status ?? 500).json({
+    if (err instanceof AppError) {
+      res.status(err.status).json({
         errors: {
           message: err.message,
         },
