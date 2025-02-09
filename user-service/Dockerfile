@@ -12,6 +12,9 @@ RUN npm install --omit=dev
 # Copiar el resto del código de la aplicación
 COPY . ./
 
+# Generar el build de la aplicacion
+RUN npm run build
+
 # Exponer el puerto en el que corre la API
 EXPOSE 3002
 
