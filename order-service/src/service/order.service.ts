@@ -11,8 +11,7 @@ import { OrderRepository } from "../repository/order.repository";
 import { ProductService } from "../dto/product-service-entity.dto";
 import { UserRepository } from "../repository/user.repository";
 
-// const APP_PRODUCT_SERVICE = "http://product-service:3008";
-const APP_PRODUCT_SERVICE = "http://localhost:3008";
+const APP_PRODUCT_SERVICE = "http://product-service:3008";
 
 export class OrderService {
   private userRepository: UserRepository;
