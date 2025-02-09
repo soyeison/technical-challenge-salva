@@ -1,12 +1,24 @@
 services:
-  # user-service:
-  #   image: user-service
-  #   ports:
-  #     - "3002:3002"
-  #   depends_on:
-  #     - user-serbice-db
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "3001:3001"
+    networks:
+      - internal_network
 
-  user-serbice-db:
+  user-service:
+    build: ./user-service
+    ports:
+      - "3002:3002"
+    depends_on:
+      - user-service-db
+    networks:
+      - internal_network
+    environment:
+      - DATABASE_HOST=user-service-db
+      - DATABASE_PORT=5432
+
+  user-service-db:
     image: postgres
     restart: always
     environment:
@@ -16,3 +28,8 @@ services:
       - C:/ProgramData/PostgreSQL/microservices/user-service:/var/lib/postgresql/data
     ports:
       - "5550:5432"
+    networks:
+      - internal_network
+
+networks:
+  internal_network:

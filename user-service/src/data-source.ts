@@ -6,8 +6,10 @@ import { User } from "./entity/user.entity";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
-  host: "localhost",
-  port: 5550,
+  host: process.env.DATABASE_HOST,
+  port: process.env.DATABASE_PORT
+    ? parseInt(process.env.DATABASE_PORT, 10)
+    : 5432,
   username: "postgres",
   password: "supersecret",
   database: "postgres",
