@@ -38,5 +38,30 @@ services:
     networks:
       - internal_network
 
+  product-service:
+    build: ./product-service
+    ports:
+      - 3008
+    depends_on:
+      - product-service-db
+    networks:
+      - internal_network
+    environment:
+      - DATABASE_HOST=product-service-db
+      - DATABASE_PORT=5432
+
+  product-service-db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=supersecret
+    volumes:
+      - C:/ProgramData/PostgreSQL/microservices/product-service:/var/lib/postgresql/data
+    ports:
+      - "5552:5432"
+    networks:
+      - internal_network
+
 networks:
   internal_network:
