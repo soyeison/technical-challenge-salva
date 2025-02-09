@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { NextFunction, Request, Response } from "express";
 
 const APP_SERVICE_URL = "http://user-service:3002";
@@ -9,10 +9,18 @@ export class UserController {
     res: Response,
     next: NextFunction
   ): Promise<void> => {
+    // TODO: Refactorizar esto
     const { limit, page } = req.query;
     try {
-      const resp = await axios.get(`${APP_SERVICE_URL}/users`);
-      console.log("Users from user service: ", resp.data);
+      const resp = await axios.get(
+        limit && page
+          ? `${APP_SERVICE_URL}/users?limit=${limit}&page=${page}`
+          : limit && !page
+          ? `${APP_SERVICE_URL}/users?limit=${limit}`
+          : !limit && page
+          ? `${APP_SERVICE_URL}/users?page=${page}`
+          : `${APP_SERVICE_URL}/users`
+      );
       res.status(resp.status).json(resp.data);
     } catch (error) {
       console.log("Error obteniendo todos los usuarios");
