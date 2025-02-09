@@ -63,5 +63,30 @@ services:
     networks:
       - internal_network
 
+  order-service:
+    build: ./order-service
+    ports:
+      - 3006
+    depends_on:
+      - order-service-db
+    networks:
+      - internal_network
+    environment:
+      - DATABASE_HOST=order-service-db
+      - DATABASE_PORT=5432
+
+  order-service-db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=supersecret
+    volumes:
+      - C:/ProgramData/PostgreSQL/microservices/order-service:/var/lib/postgresql/data
+    ports:
+      - "5553:5432"
+    networks:
+      - internal_network
+
 networks:
   internal_network:
