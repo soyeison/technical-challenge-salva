@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import "dotenv/config";
 import { GlobalErrorHanlder } from "./middleware/error-handler";
 import { authRouter } from "./routes/auth.route";
+import { AppError } from "./error/error-status";
 
 const app = express();
 
@@ -13,6 +14,10 @@ app.get("/healthcheck", (req: Request, res: Response) => {
 });
 
 app.use("/auth", authRouter);
+
+app.use((req, res, next) => {
+  next(new AppError("Route not found", 404));
+});
 
 // Error handler
 app.use(GlobalErrorHanlder.handleError);
