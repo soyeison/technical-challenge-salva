@@ -7,25 +7,14 @@ import { validateQuery } from "../middleware/validate-query";
 import { emailQuerySchema } from "../schemas/email.schema";
 import { paginateSchema } from "../schemas/paginate.schema";
 import { UserController } from "../controller/user.controller";
+import { signInSchema } from "../schemas/sign-in.schema";
+import { AuthController } from "../controller/auth.controller";
 
 const router = express.Router();
 
-const userController = new UserController();
+const authController = new AuthController();
 
-router.get("/", validateQuery(paginateSchema), userController.getAll);
-router.post("/", validateBody(createUserSchema), userController.create);
-// This route shouldn't expose to client
-/* router.get(
-  "/search",
-  validateQuery(emailQuerySchema),
-  userController.getByEmail
-); */
-router.put(
-  "/:id",
-  validateId,
-  validateBody(updateUserSchema),
-  userController.update
-);
-router.delete("/:id", validateId, userController.delete);
+router.post("/sign-in", validateBody(signInSchema), authController.signIn);
+router.post("/sign-up", validateBody(createUserSchema), authController.signUp);
 
-export { router as userRouter };
+export { router as authRouter };
