@@ -4,6 +4,7 @@ import { GlobalErrorHanlder } from "./middleware/error-handler";
 import { AppError } from "./error/error-status";
 import { AppDataSource } from "./data-source";
 import { orderRouter } from "./routes/order.routes";
+import { userRouter } from "./routes/user.routes";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 
 // Principal route
 app.use("/orders", orderRouter);
+app.use("/users", userRouter);
 
 // Manage 404 not found routes
 app.use((req, res, next) => {

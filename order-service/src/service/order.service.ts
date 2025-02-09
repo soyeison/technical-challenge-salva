@@ -9,14 +9,21 @@ import { Order } from "../entity/order.entity";
 import { AppError } from "../error/error-status";
 import { OrderRepository } from "../repository/order.repository";
 import { ProductService } from "../dto/product-service-entity.dto";
+import { UserRepository } from "../repository/user.repository";
 
-const APP_PRODUCT_SERVICE = "http://user-service:3008";
+// const APP_PRODUCT_SERVICE = "http://product-service:3008";
+const APP_PRODUCT_SERVICE = "http://localhost:3008";
 
 export class OrderService {
+  private userRepository: UserRepository;
   private orderRepository: OrderRepository;
 
-  constructor(orderRepository: OrderRepository) {
+  constructor(
+    orderRepository: OrderRepository,
+    userRepository: UserRepository
+  ) {
     this.orderRepository = orderRepository;
+    this.userRepository = userRepository;
   }
 
   async getAll(limit: number = 5, page: number = 1): Promise<Order[]> {
@@ -98,9 +105,20 @@ export class OrderService {
     await queryRunner.startTransaction();
 
     try {
+      // Consultar el id del usuario
+      const user = await this.userRepository.findOne({
+        where: { userServiceId: payload.userId },
+      });
+
+      if (!user) {
+        throw new AppError(
+          `El usuario con id ${payload.userId} no existe`,
+          404
+        );
+      }
       // Construir el detalle de la orden
       const orderToCreate = new Order();
-      orderToCreate.userId = payload.userId;
+      orderToCreate.userId = user.id;
       orderToCreate.totalPrice = 0;
       orderToCreate.orderDate = new Date();
 

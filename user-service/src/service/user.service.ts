@@ -1,3 +1,4 @@
+import axios from "axios";
 import { AppDataSource } from "../data-source";
 import { CreateUserDto } from "../dto/create-user.dto";
 import { UpdateUserDto } from "../dto/update-user.dto";
@@ -5,6 +6,8 @@ import { UserTypeWithoutPassword } from "../dto/user-without-password.dto";
 import { User } from "../entity/user.entity";
 import { AppError } from "../error/error-status";
 import { UserRepository } from "../repository/user.repository";
+
+const APP_ORDER_SERVICE = "http://order-service:3006";
 
 export class UserService {
   private userRepository: UserRepository;
@@ -39,6 +42,23 @@ export class UserService {
     return userResp;
   }
 
+  private async createUserOrderService(fullName: string, id: number) {
+    try {
+      const resp = await axios.post(
+        `${APP_ORDER_SERVICE}/users`,
+        { fullName, userServiceId: id },
+        {
+          validateStatus: (status: number) => status < 500,
+        }
+      );
+
+      return resp;
+    } catch (error) {
+      console.log("Error inesperado", error);
+      throw new AppError("Error inesperado", 500);
+    }
+  }
+
   async create(payload: CreateUserDto): Promise<UserTypeWithoutPassword> {
     const userToCreate = new User();
     userToCreate.firstName = payload.firstName;
@@ -48,6 +68,12 @@ export class UserService {
 
     const userCreated = await this.userRepository.save(userToCreate);
     const { password, ...rest } = userCreated;
+
+    // Crear usuario en el microservicio de ordenes
+    await this.createUserOrderService(
+      `${payload.firstName} ${payload.lastName}`,
+      userCreated.id
+    );
     return rest;
   }
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { AppError } from "../error/error-status";
 import { User } from "../entity/user";

@@ -9,11 +9,14 @@ import { OrderService } from "../service/order.service";
 import { OrderRepository } from "../repository/order.repository";
 import { Order } from "../entity/order.entity";
 import { createOrderSchema } from "../schemas/create-order.schema";
+import { UserRepository } from "../repository/user.repository";
+import { User } from "../entity/user.entity";
 
 const router = express.Router();
 
+const userRepository = new UserRepository(AppDataSource.getRepository(User));
 const orderRepository = new OrderRepository(AppDataSource.getRepository(Order));
-const orderService = new OrderService(orderRepository);
+const orderService = new OrderService(orderRepository, userRepository);
 const orderController = new OrderController(orderService);
 
 router.get("/", validateQuery(paginateSchema), orderController.getAll);
