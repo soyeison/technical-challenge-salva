@@ -5,6 +5,13 @@ services:
       - "3001:3001"
     networks:
       - internal_network
+    
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "3005:3005"
+    networks:
+      - internal_network
 
   user-service:
     build: ./user-service

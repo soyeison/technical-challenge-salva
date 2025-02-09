@@ -51,14 +51,13 @@ export class UserService {
     return rest;
   }
 
-  async getByEmail(email: string): Promise<UserTypeWithoutPassword | null> {
+  async getByEmail(email: string): Promise<User | null> {
     const user = await this.userRepository.findOneBy({ email });
 
     if (!user) {
       throw new AppError(`El usuario con email ${email} no existe`, 404);
     }
-    const { password, ...rest } = user;
-    return rest;
+    return user;
   }
 
   async update(
