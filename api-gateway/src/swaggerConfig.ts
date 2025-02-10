@@ -13,6 +13,9 @@ const swaggerOptions: Options = {
       {
         url: `http://localhost:${process.env.PORT}`,
       },
+      {
+        url: "http://ec2-3-145-20-78.us-east-2.compute.amazonaws.com:80",
+      },
     ],
     components: {
       securitySchemes: {
