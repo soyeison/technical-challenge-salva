@@ -104,4 +104,27 @@ export class ProductController {
       return next(error);
     }
   };
+
+  public unitsToRemove = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const { id, unitsToRemove } = req.params;
+    try {
+      if (!id || !unitsToRemove) {
+        return next(
+          new AppError("Por favor proporcione parametros validos", 400)
+        );
+      }
+
+      const resp = await this.productService.unitsToRemove(+id, +unitsToRemove);
+      res
+        .status(200)
+        .json({ data: resp, message: "Producto actualizado con exito" });
+    } catch (error) {
+      console.log("Error al actualizar el producto");
+      return next(error);
+    }
+  };
 }

@@ -10,6 +10,7 @@ import { createProductSchema } from "../schemas/create-product.schema";
 import { validateBody } from "../middleware/validate-body";
 import { validateId } from "../middleware/validate-id";
 import { updateProductSchema } from "../schemas/update-product.schema";
+import { validateUnitsToRemove } from "../middleware/validate-units-to-remove";
 
 const router = express.Router();
 
@@ -29,5 +30,13 @@ router.put(
   productController.update
 );
 router.delete("/:id", validateId, productController.delete);
+
+// TODO: Validar el parametro unitsToRemove
+router.put(
+  "/:id/:unitsToRemove",
+  validateId,
+  validateUnitsToRemove,
+  productController.unitsToRemove
+);
 
 export { router as productRouter };

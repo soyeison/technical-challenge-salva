@@ -63,10 +63,10 @@ export class ProductService {
   }
 
   async delete(id: number) {
-    const user = await this.productRepository.findOneBy({ id });
+    const product = await this.productRepository.findOneBy({ id });
 
-    if (!user) {
-      throw new AppError(`El usuario con id ${id} no existe`, 404);
+    if (!product) {
+      throw new AppError(`El producto con id ${id} no existe`, 404);
     }
 
     await AppDataSource.createQueryBuilder()
@@ -74,5 +74,26 @@ export class ProductService {
       .from(Product)
       .where("id = :id", { id })
       .execute();
+  }
+
+  async unitsToRemove(id: number, unitsToRemove: number): Promise<Product> {
+    const product = await this.productRepository.findOneBy({ id });
+    if (!product) {
+      throw new AppError(`El producto con id ${id} no existe`, 404);
+    }
+
+    const unitsResult = product.stock - unitsToRemove;
+
+    if (unitsResult < 0) {
+      throw new AppError("No hay suficientes unidades en stock", 400);
+    }
+
+    await this.productRepository.update(id, {
+      stock: unitsResult,
+    });
+
+    product.stock = unitsResult;
+
+    return product;
   }
 }
