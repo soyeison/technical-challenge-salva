@@ -5,6 +5,9 @@ services:
       - "3001:3001"
     networks:
       - internal_network
+    environment:
+      - PORT=3001
+      - JWT_SECRET_KEY=estaE3sKey
     
   auth-service:
     build: ./auth-service
@@ -12,6 +15,9 @@ services:
       - "3005:3005"
     networks:
       - internal_network
+    environment:
+      - PORT=3005
+      - JWT_SECRET_KEY=estaE3sKey
 
   user-service:
     build: ./user-service
@@ -22,8 +28,12 @@ services:
     networks:
       - internal_network
     environment:
+      - PORT=3002
       - DATABASE_HOST=user-service-db
       - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=supersecret
+      - DATABASE_NAME=postgres
 
   user-service-db:
     image: postgres
@@ -47,8 +57,12 @@ services:
     networks:
       - internal_network
     environment:
+      - PORT=3008
       - DATABASE_HOST=product-service-db
       - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=supersecret
+      - DATABASE_NAME=postgres
 
   product-service-db:
     image: postgres
@@ -72,8 +86,12 @@ services:
     networks:
       - internal_network
     environment:
+      - PORT=3006
       - DATABASE_HOST=order-service-db
       - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=supersecret
+      - DATABASE_NAME=postgres
 
   order-service-db:
     image: postgres

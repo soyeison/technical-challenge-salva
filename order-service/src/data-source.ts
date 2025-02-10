@@ -12,9 +12,9 @@ export const AppDataSource = new DataSource({
   port: process.env.DATABASE_PORT
     ? parseInt(process.env.DATABASE_PORT, 10)
     : 5432,
-  username: "postgres",
-  password: "supersecret",
-  database: "postgres",
+  username: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
   synchronize: true,
   logging: true,
   entities: [Order, User, OrderDetail],
