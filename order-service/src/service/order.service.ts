@@ -53,6 +53,20 @@ export class OrderService {
     return order;
   }
 
+  async removeStock(id: number, quantity: number): Promise<void> {
+    const resp = await axios.put(
+      `${APP_PRODUCT_SERVICE}/products/${id}/${quantity}`,
+      {},
+      {
+        validateStatus: (status) => status < 500,
+      }
+    );
+
+    if (resp.status === 400) {
+      throw new AppError(resp.data.errors.message, 400);
+    }
+  }
+
   calculateOrderTotal(details: OrderDetail[]) {
     return details.reduce(
       (sum, detail) => sum + detail.productPrice * detail.quantity,
@@ -93,6 +107,8 @@ export class OrderService {
       detail.quantity = product.quantity;
       detail.lineTotalPrice = productData.price * product.quantity;
       detail.order = order;
+
+      await this.removeStock(product.productId, product.quantity);
 
       resp.push(detail);
     }
