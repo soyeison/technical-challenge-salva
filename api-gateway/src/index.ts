@@ -9,10 +9,14 @@ import { authRouter } from "./routes/auth.routes";
 import { productRouter } from "./routes/product.routes";
 import { orderRouter } from "./routes/order.routes";
 import swaggerOptions from "./swaggerConfig";
+import { rateLimiter } from "./middleware/rate-limiter";
 
 const app = express();
 
 app.use(express.json());
+
+// Middleware de rate-limiter
+app.use(rateLimiter);
 
 app.get("/healthcheck", (req: Request, res: Response) => {
   res.send("Server working");
