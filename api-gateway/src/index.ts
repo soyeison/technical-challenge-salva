@@ -1,11 +1,14 @@
 import "dotenv/config";
 import express, { Request, Response } from "express";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 import { userRouter } from "./routes/user.routes";
 import { AppError } from "./error/error-status";
 import { GlobalErrorHanlder } from "./middleware/error-handler";
 import { authRouter } from "./routes/auth.routes";
 import { productRouter } from "./routes/product.routes";
 import { orderRouter } from "./routes/order.routes";
+import swaggerOptions from "./swaggerConfig";
 
 const app = express();
 
@@ -19,6 +22,10 @@ app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/products", productRouter);
 app.use("/orders", orderRouter);
+
+// Generar la documentacion de Swagger
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Manage 404 not found routes
 app.use((req, res, next) => {
