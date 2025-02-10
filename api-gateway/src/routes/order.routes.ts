@@ -107,6 +107,13 @@ router.get(
  *     tags: [Orders]
  *     security:
  *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la orden
  *     requestBody:
  *       required: false
  *     responses:
@@ -317,6 +324,13 @@ router.post(
  *     tags: [Orders]
  *     security:
  *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la orden
  *     requestBody:
  *       required: false
  *     responses:
