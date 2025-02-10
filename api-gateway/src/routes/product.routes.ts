@@ -20,6 +20,19 @@ const productController = new ProductController();
  *     tags: [Products]
  *     security:
  *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           example: 10
+ *         description: Limit the number of results
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *         description: Page number
  *     requestBody:
  *       required: false
  *     responses:
