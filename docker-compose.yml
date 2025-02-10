@@ -118,3 +118,11 @@ services:
 
 networks:
   internal_network:
+
+volumes:
+  pgdata1:
+    driver: local
+  pgdata2:
+    driver: local
+  pgdata3:
+    driver: local
