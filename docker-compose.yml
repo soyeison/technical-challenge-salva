@@ -2,7 +2,7 @@ services:
   api-gateway:
     build: ./api-gateway
     ports:
-      - "3001:3001"
+      - "80:3001"
     networks:
       - internal_network
     environment:
