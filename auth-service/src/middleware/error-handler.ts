@@ -15,6 +15,7 @@ export class GlobalErrorHanlder {
         },
       });
     } else {
+      console.log("Error: ", err);
       res.status(500).json({
         errors: {
           message: "An unknown error occurred",
