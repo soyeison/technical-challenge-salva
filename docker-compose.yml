@@ -39,7 +39,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=supersecret
     volumes:
-      - C:/ProgramData/PostgreSQL/microservices/user-service:/var/lib/postgresql/data
+      - pgdata1:/var/lib/postgresql/data
     ports:
       - "5550:5432"
     networks:
@@ -72,7 +72,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=supersecret
     volumes:
-      - C:/ProgramData/PostgreSQL/microservices/product-service:/var/lib/postgresql/data
+      - pgdata2:/var/lib/postgresql/data
     ports:
       - "5552:5432"
     networks:
@@ -105,7 +105,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=supersecret
     volumes:
-      - C:/ProgramData/PostgreSQL/microservices/order-service:/var/lib/postgresql/data
+      - pgdata3:/var/lib/postgresql/data
     ports:
       - "5553:5432"
     networks:
