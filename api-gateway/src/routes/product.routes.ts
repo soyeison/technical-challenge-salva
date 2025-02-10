@@ -6,20 +6,32 @@ import { createProductSchema } from "../schemas/create-product.schema";
 import { updateProductSchema } from "../schemas/update-product.schema";
 import { validateBody } from "../middleware/validate-body";
 import { validateId } from "../middleware/validate-id";
+import { validateToken } from "../middleware/validate-token";
 
 const router = express.Router();
 
 const productController = new ProductController();
 
-router.get("/", validateQuery(paginateSchema), productController.getAll);
-router.post("/", validateBody(createProductSchema), productController.create);
-router.get("/:id", validateId, productController.getById);
+router.get(
+  "/",
+  validateToken,
+  validateQuery(paginateSchema),
+  productController.getAll
+);
+router.post(
+  "/",
+  validateToken,
+  validateBody(createProductSchema),
+  productController.create
+);
+router.get("/:id", validateToken, validateId, productController.getById);
 router.put(
   "/:id",
+  validateToken,
   validateId,
   validateBody(updateProductSchema),
   productController.update
 );
-router.delete("/:id", validateId, productController.delete);
+router.delete("/:id", validateToken, validateId, productController.delete);
 
 export { router as productRouter };
