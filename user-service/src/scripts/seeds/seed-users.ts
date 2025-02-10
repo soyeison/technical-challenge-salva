@@ -1,6 +1,9 @@
+import axios from "axios";
 import { AppDataSource } from "../../data-source";
 import { User } from "../../entity/user.entity";
 import { UserRepository } from "../../repository/user.repository";
+
+const APP_ORDER_SERVICE = "http://order-service:3006";
 
 async function seedUsersDatabase() {
   await AppDataSource.initialize();
@@ -33,8 +36,20 @@ async function seedUsersDatabase() {
   for (const user of seedDataUsers) {
     const exists = await userRepository.findOneBy({ email: user.email });
     if (!exists) {
-      await userRepository.save(user);
+      const userCreated = await userRepository.save(user);
       console.log(`Usuario creado: ${user.firstName}`);
+
+      // Crearlos en la base de datos de ordenes
+      await axios.post(
+        `${APP_ORDER_SERVICE}/users`,
+        {
+          fullName: `${userCreated.firstName} ${userCreated.lastName}`,
+          userServiceId: userCreated.id,
+        },
+        {
+          validateStatus: (status: number) => status < 500,
+        }
+      );
     } else {
       console.log(`Usuario ya existe: ${user.firstName}`);
     }
