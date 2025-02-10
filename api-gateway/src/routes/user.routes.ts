@@ -14,12 +14,6 @@ const userController = new UserController();
 
 router.get("/", validateQuery(paginateSchema), userController.getAll);
 router.post("/", validateBody(createUserSchema), userController.create);
-// This route shouldn't expose to client
-/* router.get(
-  "/search",
-  validateQuery(emailQuerySchema),
-  userController.getByEmail
-); */
 router.put(
   "/:id",
   validateId,

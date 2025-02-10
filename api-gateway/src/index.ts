@@ -4,6 +4,8 @@ import { userRouter } from "./routes/user.routes";
 import { AppError } from "./error/error-status";
 import { GlobalErrorHanlder } from "./middleware/error-handler";
 import { authRouter } from "./routes/auth.routes";
+import { productRouter } from "./routes/product.routes";
+import { orderRouter } from "./routes/order.routes";
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.get("/healthcheck", (req: Request, res: Response) => {
 
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
+app.use("/products", productRouter);
+app.use("/orders", orderRouter);
 
 // Manage 404 not found routes
 app.use((req, res, next) => {

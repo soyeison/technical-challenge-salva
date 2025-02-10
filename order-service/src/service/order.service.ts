@@ -42,7 +42,10 @@ export class OrderService {
   }
 
   async getById(id: number): Promise<Order | null> {
-    const order = await this.orderRepository.findOneBy({ id });
+    const order = await this.orderRepository.findOne({
+      where: { id },
+      relations: ["orderDetails", "user"],
+    });
 
     if (!order) {
       throw new AppError(`La orden con id ${id} no existe`, 404);

@@ -1,9 +1,9 @@
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 
-const APP_USER_SERVICE_URL = "http://user-service:3002";
+const APP_PRODUCT_SERVICE_URL = "http://product-service:3008";
 
-export class UserController {
+export class ProductController {
   public getAll = async (
     req: Request,
     res: Response,
@@ -14,20 +14,40 @@ export class UserController {
     try {
       const resp = await axios.get(
         limit && page
-          ? `${APP_USER_SERVICE_URL}/users?limit=${limit}&page=${page}`
+          ? `${APP_PRODUCT_SERVICE_URL}/products?limit=${limit}&page=${page}`
           : limit && !page
-          ? `${APP_USER_SERVICE_URL}/users?limit=${limit}`
+          ? `${APP_PRODUCT_SERVICE_URL}/products?limit=${limit}`
           : !limit && page
-          ? `${APP_USER_SERVICE_URL}/users?page=${page}`
-          : `${APP_USER_SERVICE_URL}/users`,
+          ? `${APP_PRODUCT_SERVICE_URL}/products?page=${page}`
+          : `${APP_PRODUCT_SERVICE_URL}/products`,
         {
           validateStatus: (status: number) => status < 500,
         }
       );
       res.status(resp.status).json(resp.data);
     } catch (error) {
-      console.log("Error obteniendo todos los usuarios");
+      console.log("Error obteniendo todos los productos");
       next(error);
+    }
+  };
+
+  public getById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const { id } = req.params;
+    try {
+      const resp = await axios.get(
+        `${APP_PRODUCT_SERVICE_URL}/products/${id}`,
+        {
+          validateStatus: (status: number) => status < 500,
+        }
+      );
+      res.status(resp.status).json(resp.data);
+    } catch (error) {
+      console.log(`Error obteniendo el producto con id ${id}`);
+      return next(error);
     }
   };
 
@@ -38,32 +58,16 @@ export class UserController {
   ): Promise<void> => {
     const payload = req.body;
     try {
-      const resp = await axios.post(`${APP_USER_SERVICE_URL}/users`, payload, {
-        validateStatus: (status: number) => status < 500,
-      });
-      res.status(resp.status).json(resp.data);
-    } catch (error) {
-      console.log("Error obteniendo todos los usuarios");
-      return next(error);
-    }
-  };
-
-  public getByEmail = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
-    const { email } = req.query;
-    try {
-      const resp = await axios.get(
-        `${APP_USER_SERVICE_URL}/users?email=${email}`,
+      const resp = await axios.post(
+        `${APP_PRODUCT_SERVICE_URL}/products`,
+        payload,
         {
           validateStatus: (status: number) => status < 500,
         }
       );
       res.status(resp.status).json(resp.data);
     } catch (error) {
-      console.log("Error obteniendo el usuario por email");
+      console.log("Error creando un producto");
       return next(error);
     }
   };
@@ -77,7 +81,7 @@ export class UserController {
     const payload = req.body;
     try {
       const resp = await axios.put(
-        `${APP_USER_SERVICE_URL}/users/${id}`,
+        `${APP_PRODUCT_SERVICE_URL}/products/${id}`,
         payload,
         {
           validateStatus: (status: number) => status < 500,
@@ -85,7 +89,7 @@ export class UserController {
       );
       res.status(resp.status).json(resp.data);
     } catch (error) {
-      console.log("Error al actualizar el usuario");
+      console.log("Error al actualizar un producto");
       return next(error);
     }
   };
@@ -97,12 +101,15 @@ export class UserController {
   ): Promise<void> => {
     const { id } = req.params;
     try {
-      const resp = await axios.delete(`${APP_USER_SERVICE_URL}/users/${id}`, {
-        validateStatus: (status: number) => status < 500,
-      });
+      const resp = await axios.delete(
+        `${APP_PRODUCT_SERVICE_URL}/products/${id}`,
+        {
+          validateStatus: (status: number) => status < 500,
+        }
+      );
       res.status(resp.status).json(resp.data);
     } catch (error) {
-      console.log("Error al eliminar el usuario");
+      console.log("Error al eliminar un producto");
       return next(error);
     }
   };

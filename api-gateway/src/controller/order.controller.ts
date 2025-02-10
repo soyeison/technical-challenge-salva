@@ -1,9 +1,9 @@
 import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 
-const APP_USER_SERVICE_URL = "http://user-service:3002";
+const APP_ORDER_SERVICE_URL = "http://order-service:3006";
 
-export class UserController {
+export class OrderController {
   public getAll = async (
     req: Request,
     res: Response,
@@ -14,20 +14,37 @@ export class UserController {
     try {
       const resp = await axios.get(
         limit && page
-          ? `${APP_USER_SERVICE_URL}/users?limit=${limit}&page=${page}`
+          ? `${APP_ORDER_SERVICE_URL}/orders?limit=${limit}&page=${page}`
           : limit && !page
-          ? `${APP_USER_SERVICE_URL}/users?limit=${limit}`
+          ? `${APP_ORDER_SERVICE_URL}/orders?limit=${limit}`
           : !limit && page
-          ? `${APP_USER_SERVICE_URL}/users?page=${page}`
-          : `${APP_USER_SERVICE_URL}/users`,
+          ? `${APP_ORDER_SERVICE_URL}/orders?page=${page}`
+          : `${APP_ORDER_SERVICE_URL}/orders`,
         {
           validateStatus: (status: number) => status < 500,
         }
       );
       res.status(resp.status).json(resp.data);
     } catch (error) {
-      console.log("Error obteniendo todos los usuarios");
+      console.log("Error obteniendo todas las ordenes");
       next(error);
+    }
+  };
+
+  public getById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const { id } = req.params;
+    try {
+      const resp = await axios.get(`${APP_ORDER_SERVICE_URL}/orders/${id}`, {
+        validateStatus: (status: number) => status < 500,
+      });
+      res.status(resp.status).json(resp.data);
+    } catch (error) {
+      console.log(`Error obteniendo la orden con id ${id}`);
+      return next(error);
     }
   };
 
@@ -38,46 +55,8 @@ export class UserController {
   ): Promise<void> => {
     const payload = req.body;
     try {
-      const resp = await axios.post(`${APP_USER_SERVICE_URL}/users`, payload, {
-        validateStatus: (status: number) => status < 500,
-      });
-      res.status(resp.status).json(resp.data);
-    } catch (error) {
-      console.log("Error obteniendo todos los usuarios");
-      return next(error);
-    }
-  };
-
-  public getByEmail = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
-    const { email } = req.query;
-    try {
-      const resp = await axios.get(
-        `${APP_USER_SERVICE_URL}/users?email=${email}`,
-        {
-          validateStatus: (status: number) => status < 500,
-        }
-      );
-      res.status(resp.status).json(resp.data);
-    } catch (error) {
-      console.log("Error obteniendo el usuario por email");
-      return next(error);
-    }
-  };
-
-  public update = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
-    const { id } = req.params;
-    const payload = req.body;
-    try {
-      const resp = await axios.put(
-        `${APP_USER_SERVICE_URL}/users/${id}`,
+      const resp = await axios.post(
+        `${APP_ORDER_SERVICE_URL}/orders`,
         payload,
         {
           validateStatus: (status: number) => status < 500,
@@ -85,7 +64,7 @@ export class UserController {
       );
       res.status(resp.status).json(resp.data);
     } catch (error) {
-      console.log("Error al actualizar el usuario");
+      console.log("Error creando una orden");
       return next(error);
     }
   };
@@ -97,12 +76,12 @@ export class UserController {
   ): Promise<void> => {
     const { id } = req.params;
     try {
-      const resp = await axios.delete(`${APP_USER_SERVICE_URL}/users/${id}`, {
+      const resp = await axios.delete(`${APP_ORDER_SERVICE_URL}/orders/${id}`, {
         validateStatus: (status: number) => status < 500,
       });
       res.status(resp.status).json(resp.data);
     } catch (error) {
-      console.log("Error al eliminar el usuario");
+      console.log("Error al eliminar una orden");
       return next(error);
     }
   };

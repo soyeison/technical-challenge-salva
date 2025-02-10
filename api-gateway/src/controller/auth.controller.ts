@@ -1,7 +1,7 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 
-const APP_SERVICE_URL = "http://auth-service:3005";
+const APP_AUTH_SERVICE_URL = "http://auth-service:3005";
 
 export class AuthController {
   public signIn = async (
@@ -12,7 +12,7 @@ export class AuthController {
     const payload = req.body;
     try {
       const resp = await axios.post(
-        `${APP_SERVICE_URL}/auth/sign-in`,
+        `${APP_AUTH_SERVICE_URL}/auth/sign-in`,
         payload,
         {
           validateStatus: (status: number) => status < 500,
@@ -33,7 +33,7 @@ export class AuthController {
     const payload = req.body;
     try {
       const resp = await axios.post(
-        `${APP_SERVICE_URL}/auth/sign-up`,
+        `${APP_AUTH_SERVICE_URL}/auth/sign-up`,
         payload,
         {
           validateStatus: (status: number) => status < 500,
