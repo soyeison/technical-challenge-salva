@@ -11,8 +11,6 @@ services:
     
   auth-service:
     build: ./auth-service
-    ports:
-      - "3005:3005"
     networks:
       - internal_network
     environment:
@@ -21,8 +19,6 @@ services:
 
   user-service:
     build: ./user-service
-    ports:
-      - "3002:3002"
     depends_on:
       - user-service-db
     networks:
@@ -50,8 +46,6 @@ services:
 
   product-service:
     build: ./product-service
-    ports:
-      - "3008:3008"
     depends_on:
       - product-service-db
     networks:
@@ -79,8 +73,6 @@ services:
 
   order-service:
     build: ./order-service
-    ports:
-      - "3006:3006"
     depends_on:
       - order-service-db
     networks:
