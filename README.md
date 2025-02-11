@@ -66,7 +66,10 @@ docker compose up -d
 In the users-service and product-service, you can run the following command to create sample records in the database:
 
 ```sh
-docker compose exec <service-name> yarn run seed
+docker compose exec <service-name> npm run seed
+
+docker compose exec user-service npm run seed
+docker compose exec product-service npm run seed
 ```
 
 ## Notes
