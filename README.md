@@ -44,7 +44,7 @@ microservice-name/
 │   ├── index.ts
 ```
 
-## Installation
+## Installation Deployment
 
 ### 1. Clone the repository
 
@@ -74,4 +74,4 @@ docker compose exec product-service npm run seed
 
 ## Notes
 
-Docker is configured to expose the API Gateway on port 3001. By navigating to .../api-docs, you will find the Swagger documentation for all the endpoints exposed to the client. (Not all created endpoints are listed. Some are used internally, such as user creation or stock reduction)
+Docker is configured to expose the API Gateway on port 80. By navigating to .../api-docs, you will find the Swagger documentation for all the endpoints exposed to the client. (Not all created endpoints are listed. Some are used internally, such as user creation or stock reduction). [Here is the link.](http://ec2-3-145-20-78.us-east-2.compute.amazonaws.com/api-docs/)
